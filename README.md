@@ -33,7 +33,7 @@ From the `frontend` directory run:
 ```bash
 npm run dev
 ```
-This starts Vite in development mode. Open the printed URL in your browser.
+This starts Vite in development mode. Open the printed URL in your browser. The front-end expects the API to be running on `http://localhost:3001`.
 
 ## Generating Locally
 You can also run the pipeline directly:
