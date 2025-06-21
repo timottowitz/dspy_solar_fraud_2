@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from client_data import get_john_doe_data
 from knowledge_base import SOC_KNOWLEDGE_BASE
 from pipeline import StatementOfClaimsPipeline
+from simple_retriever import SimpleRetriever
 
 def main():
     # --- 1. Setup ---
@@ -13,12 +14,10 @@ def main():
         raise ValueError("OPENAI_API_KEY not found in .env file.")
     
     # Configure DSPy to use a powerful model like GPT-4 Turbo
-    llm = dspy.OpenAI(model='gpt-4-turbo-preview', max_tokens=4096, model_type='chat')
+    llm = dspy.LM(model="openai/gpt-4-turbo-preview", max_tokens=4096, model_type="chat")
     
-    # Configure the Retriever using our in-memory knowledge base
-    # This creates a simple vector search over our example documents
-    retriever = dspy.retrieve.BootstrapFewShot(metric=dspy.evaluate.answer_exactness)
-    retriever = retriever.compile(student=dspy.RAG(num_passages=1), trainset=SOC_KNOWLEDGE_BASE)
+    # Configure a lightweight retriever over our in-memory knowledge base
+    retriever = SimpleRetriever(SOC_KNOWLEDGE_BASE)
     
     dspy.settings.configure(lm=llm, rm=retriever)
     

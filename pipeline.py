@@ -1,6 +1,6 @@
 # pipeline.py
 import dspy
-from .modules import SectionGenerator, LegalArgumentGenerator
+from modules import SectionGenerator, LegalArgumentGenerator
 
 class StatementOfClaimsPipeline(dspy.Module):
     def __init__(self, retriever):
