@@ -17,7 +17,7 @@ This project demonstrates a simple DSPy pipeline for generating a Statement of C
    npm install
    cd ..
    ```
-3. Create a `.env` file with your `OPENAI_API_KEY`.
+3. Create a `.env` file in the repository root with your `OPENAI_API_KEY`.
 
 ## Running
 ### Backend API

@@ -6,14 +6,14 @@ import { config } from 'dotenv';
 import { join } from 'path';
 
 // Load the environment from the repository root regardless of CWD
-config({ path: join(__dirname, '.env') });
+config({ path: join(__dirname, '../.env') });
 
 const app = new Hono();
 app.use('*', cors());
 
 app.post('/generate', async (c) => {
   const clientData = await c.req.json();
-  const python = spawn('python', [join(__dirname, 'generate.py')], {
+  const python = spawn('python', [join(__dirname, '../generate.py')], {
     stdio: ['pipe', 'pipe', 'inherit'],
   });
   python.stdin.write(JSON.stringify(clientData));
