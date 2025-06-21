@@ -1,6 +1,6 @@
 # modules.py
 import dspy
-from . import signatures
+import signatures
 
 class SectionGenerator(dspy.Module):
     def __init__(self):
