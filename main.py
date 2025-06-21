@@ -14,10 +14,12 @@ def generate_statement_of_claims(client_data: dict) -> str:
     if not os.getenv("OPENAI_API_KEY"):
         raise ValueError("OPENAI_API_KEY not found in .env file.")
 
+    # Configure DSPy to use a powerful model like GPT-4 Turbo
     llm = dspy.LM(
         model="openai/gpt-4-turbo-preview", max_tokens=4096, model_type="chat"
     )
 
+    # Configure a lightweight retriever over our in-memory knowledge base
     retriever = SimpleRetriever(SOC_KNOWLEDGE_BASE)
 
     dspy.settings.configure(lm=llm, rm=retriever)
