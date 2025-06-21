@@ -28,7 +28,7 @@ app.post('/generate', async (c) => {
   if (exitCode && exitCode !== 0) {
     return c.text('Error generating document', 500);
   }
-  return c.text(output);
+  return c.json({ document: output });
 });
 
 const port = Number(process.env.PORT) || 3001;
