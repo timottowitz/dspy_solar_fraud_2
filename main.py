@@ -1,4 +1,3 @@
-# main.py
 import dspy
 import os
 from dotenv import load_dotenv
