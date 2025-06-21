@@ -2,6 +2,7 @@
 import dspy
 from modules import SectionGenerator, LegalArgumentGenerator
 
+
 class StatementOfClaimsPipeline(dspy.Module):
     def __init__(self, retriever):
         super().__init__()
@@ -12,13 +13,13 @@ class StatementOfClaimsPipeline(dspy.Module):
     def forward(self, client_data):
         # --- 1. Consolidate Client Facts for Context ---
         client_facts_summary = "\n".join(f"- {k}: {v}" for k, v in client_data.items())
-        
+
         # --- 2. Generate Sections using RAG ---
-        
+
         # Introduction
         intro_context = self.retriever("Drafting a compelling introduction for a solar fraud case.", k=1)[0].long_text
         introduction = self.section_generator(client_facts=client_facts_summary, context=intro_context, section_title="Introduction")
-        
+
         # Factual Background (combining several parts)
         background_context = self.retriever("Drafting a detailed factual background and claimant profile for a solar arbitration.", k=1)[0].long_text
         factual_background = self.section_generator(client_facts=client_facts_summary, context=background_context, section_title="Background, Claimant Profile, Sales Process, and Installation Defects")
@@ -30,12 +31,12 @@ class StatementOfClaimsPipeline(dspy.Module):
         # --- 3. Generate Legal Causes of Action (Looping with RAG) ---
         legal_arguments = []
         causes_of_action = ["Deceptive Trade Practices Act (DTPA)", "Elder Fraud", "Filing of Fraudulent Lien"]
-        
+
         for cause in causes_of_action:
             print(f"Drafting legal argument for: {cause}...")
             # Retrieve a specific example for *this* cause of action
             example_argument = self.retriever(f"Model legal argument for {cause} in a solar financing fraud case.", k=1)[0].long_text
-            
+
             # Generate the new argument using the retrieved example
             argument = self.legal_argument_generator(
                 client_facts=f"Factual Background:\n{factual_background.section_text}\n\nClient Data:\n{client_facts_summary}",
@@ -43,7 +44,7 @@ class StatementOfClaimsPipeline(dspy.Module):
                 example_argument=example_argument
             )
             legal_arguments.append(f"### {cause.upper()}\n\n{argument.legal_argument}")
-        
+
         # Prayer for Relief
         prayer_context = self.retriever("Drafting the prayer for relief section, asking for rescission, damages, and fees.", k=1)[0].long_text
         prayer_for_relief = self.section_generator(client_facts=client_facts_summary, context=prayer_context, section_title="Prayer for Relief")

@@ -7,20 +7,21 @@ from knowledge_base import SOC_KNOWLEDGE_BASE
 from pipeline import StatementOfClaimsPipeline
 from simple_retriever import SimpleRetriever
 
+
 def main():
     # --- 1. Setup ---
     load_dotenv()
     if not os.getenv("OPENAI_API_KEY"):
         raise ValueError("OPENAI_API_KEY not found in .env file.")
-    
+
     # Configure DSPy to use a powerful model like GPT-4 Turbo
     llm = dspy.LM(model="openai/gpt-4-turbo-preview", max_tokens=4096, model_type="chat")
-    
+
     # Configure a lightweight retriever over our in-memory knowledge base
     retriever = SimpleRetriever(SOC_KNOWLEDGE_BASE)
-    
+
     dspy.settings.configure(lm=llm, rm=retriever)
-    
+
     print("DSPy configured successfully.")
 
     # --- 2. Load Data for the New Case ---
@@ -29,7 +30,7 @@ def main():
 
     # --- 3. Instantiate and Run the RAG Pipeline ---
     soc_pipeline = StatementOfClaimsPipeline(retriever=retriever)
-    
+
     print("\nGenerating Statement of Claims... This may take a few minutes.")
     final_document = soc_pipeline(client_data=client_case_data)
 
@@ -43,6 +44,7 @@ def main():
     print("="*50 + "\n")
     print("--- DOCUMENT PREVIEW ---")
     print(final_document)
+
 
 if __name__ == "__main__":
     main()

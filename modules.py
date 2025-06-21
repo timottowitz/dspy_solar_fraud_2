@@ -2,6 +2,7 @@
 import dspy
 import signatures
 
+
 class SectionGenerator(dspy.Module):
     def __init__(self):
         super().__init__()
@@ -14,10 +15,13 @@ class SectionGenerator(dspy.Module):
             section_title=section_title
         )
 
+
 class LegalArgumentGenerator(dspy.Module):
     def __init__(self):
         super().__init__()
-        self.generate = dspy.ChainOfThought(signatures.GenerateLegalCauseOfAction)
+        self.generate = dspy.ChainOfThought(
+            signatures.GenerateLegalCauseOfAction
+        )
 
     def forward(self, client_facts, cause_of_action, example_argument):
         return self.generate(
