@@ -2,9 +2,11 @@ import difflib
 from dataclasses import dataclass
 from typing import List
 
+
 @dataclass
 class RetrievedDocument:
     long_text: str
+
 
 class SimpleRetriever:
     """A lightweight in-memory retriever for Example objects."""
